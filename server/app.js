@@ -1,10 +1,17 @@
 const express = require("express")
+const cors = require("cors")
 
 const data = require("./data")
 
 
 // Create a an Express app
 const app = express()
+
+// Tell the app to listen to JSON bodies on POST requests
+app.use(express.json())
+
+//Add 'headers' to each response, saying that we're okay with sharing resources with others
+app.use(cors())
 
 // Set up a route
 app.get("/", (req, res) => {
@@ -50,6 +57,20 @@ app.get("/flavours/:id", (req, res) => {
     }
 })
 
+    // Create new iceream
+
+app.post("/flavours", (req, res) => {
+
+    const newFlavour = req.body
+    newFlavour["id"] = data.length + 1
+    data.push(newFlavour)
+
+    res.status(201).json({
+        success: true,
+        flavour: newFlavour
+    })
+
+})
 
 
 module.exports = app
